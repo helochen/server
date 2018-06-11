@@ -3,6 +3,7 @@ package com.service.controller.impl;
 import com.service.annotation.EasyMapping;
 import com.service.annotation.EasyModule;
 import com.service.controller.RunnableFactory;
+import org.share.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -10,11 +11,12 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class BusinessController implements BeanPostProcessor , RunnableFactory {
+public class BusinessController implements BeanPostProcessor, RunnableFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(BusinessController.class);
     /**
@@ -26,7 +28,7 @@ public class BusinessController implements BeanPostProcessor , RunnableFactory {
     private Map<String, RouteInfo> commandInfo = new HashMap<>();
     /**
      * 每个命令对于的组
-     * */
+     */
     private Map<String, String> commandModule = new HashMap<>();
 
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -44,6 +46,11 @@ public class BusinessController implements BeanPostProcessor , RunnableFactory {
                     routeInfo.command = m_annotation.command();
                     routeInfo.clazz = bean.getClass();
                     routeInfo.method = method;
+                    routeInfo.type = method.getReturnType();
+                    if (routeInfo.type != Message.class && routeInfo.type != void.class) {
+                        logger.error("做了一个约定，业务层返回的数据一定是Message对象或者void,实际上:{},类:{}，方法:{}",
+                                routeInfo.type, bean.getClass(), method.getName());
+                    }
                     routeInfo.bean = bean;
                     routeInfo.module = bean_annotation.name();
                     routeInfo.deprecated = m_annotation.deprecated();
@@ -69,14 +76,23 @@ public class BusinessController implements BeanPostProcessor , RunnableFactory {
         RouteInfo routeInfo = commandInfo.get(command);
         if (routeInfo != null) {
             if (routeInfo.deprecated) {
-                logger.error("客户端获取放弃的映射command:{}, bean Clazz:{}", command ,routeInfo.clazz);
+                logger.error("客户端获取放弃的映射command:{}, bean Clazz:{}", command, routeInfo.clazz);
                 return null;
             } else {
                 Method method = routeInfo.method;
                 Object bean = routeInfo.bean;
-                return () ->{
+                return () -> {
                     try {
-                        method.invoke(bean, data);
+                        Object value = method.invoke(bean, data);
+                        /**
+                         * void会返回null值
+                         */
+                        if (value != null) {
+                            /**
+                             * TODO 返回Message对象(前面做了约定)，处理Message对象
+                             */
+                            System.out.println("result:\t" + value.toString());
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         logger.error("不好了，出现错误了BusinessController->getRunnalbe:{}", command);
@@ -116,5 +132,8 @@ public class BusinessController implements BeanPostProcessor , RunnableFactory {
 
         /*线程池组标识*/
         String group;
+
+        /*Type函数返回的类型*/
+        Type type;
     }
 }
