@@ -3,7 +3,6 @@ package com.exchange.manager;
 import com.exchange.manager.pool.GroupServicePoolDispatcher;
 import com.exchange.manager.session.SessionManager;
 import io.netty.channel.Channel;
-import io.netty.channel.group.ChannelMatcher;
 import org.stage.manager.ChannelManager;
 
 public class NodeSwapManager {
