@@ -3,6 +3,8 @@ package com.exchange.manager;
 import com.exchange.manager.pool.GroupServicePoolDispatcher;
 import com.exchange.manager.session.SessionManager;
 import io.netty.channel.Channel;
+import io.netty.channel.group.ChannelMatcher;
+import org.stage.manager.ChannelManager;
 
 public class NodeSwapManager {
 
@@ -20,10 +22,10 @@ public class NodeSwapManager {
         this.sessionManager = sessionManager;
     }
 
-    /*TODO*/
-    public void activeSession(io.netty.channel.Channel remote) {
-        System.out.println("activeSession........:D");
 
+    public void activeSession(io.netty.channel.Channel remote) {
+        ChannelManager.getInstance().acitve(remote);
+        System.out.println("activeSession........:D");
     }
 
     public void dispatcher(Object[] data) {
@@ -31,6 +33,7 @@ public class NodeSwapManager {
     }
 
     public void inactiveSession(Channel remote) {
+        ChannelManager.getInstance().inactive(remote);
         System.out.println("inactiveSession........:D");
     }
 }
