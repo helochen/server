@@ -10,7 +10,9 @@ import org.stage.session.constants.StageChannelGroupType;
 import java.util.Vector;
 
 /**
- * 创建场景
+ * 创建场景，场景的信息，哪些用户在该场景内
+ * @Author chen
+ * @Date  2018/06/12
  */
 public class StageSession implements IStage {
 
@@ -22,6 +24,7 @@ public class StageSession implements IStage {
                 stageChannels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
                 break;
             case NEVER_USE:
+            case SINGLE_GROUP:
             default:
                 stageChannels = new DefaultChannelGroup(new DefaultEventExecutor());
                 break;
@@ -75,4 +78,25 @@ public class StageSession implements IStage {
     public boolean checkInStage(long roleId) {
         return false;
     }
+
+    /**
+     * 加入场景
+     *
+     * @param roleId
+     */
+    @Override
+    public boolean joinStage(long roleId) {
+        return roles.add(roleId);
+    }
+
+    /**
+     * 退出场景
+     *
+     * @param roleId
+     */
+    @Override
+    public boolean exitStage(long roleId) {
+        return roles.remove(roleId);
+    }
+
 }
