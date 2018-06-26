@@ -2,7 +2,7 @@ package org.server.demo.run;
 
 import com.connect.gate.GateServer;
 import com.connect.gate.rpc.rpchanlderImpl.BaseRpcHandler;
-import com.exchange.manager.NodeSwapManager;
+import com.exchange.NodeSwapManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

@@ -1,50 +1,61 @@
 package org.share.msg;
 
-
 /**
- * Game-service服务将返回的消息封装Message对象
- * 通过对象获取信息，通过Game-gate的IOMsgDisptcher 发送给客户端
- * 是否需要实现server-stage标识对象所在的stage，方便将所有的消息发送给stage内的对象
- *
+ * 统一的传入到服务方法中的对象
  * @Author chen
- * @Date 22：52 2018-06-06
+ * @Date 2018.6.20
  */
 public class Message {
 
-    private Object stage;
-
-    private Object command;
-
+    /**
+     * Channel传递上的数据
+     */
     private Object source;
 
-    private Message(Object cmd, Object src, Object stage) {
-        this.command = cmd;
-        this.source = src;
-        this.stage = stage;
+    /**
+     * SessionID 保存在Session中的ID
+     */
+    private String sessionId;
+
+    /**
+     * 登陆的用户StageId,所在的场景
+     */
+    private String stageId;
+
+    /**
+     * 该消息创建的事件
+     */
+    private long createTime = System.currentTimeMillis();
+
+    /**
+     * @return a string representation of the object.
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("sessionId:").append(sessionId).append("\tstageId:").append(stageId).append("\tcreateTime:").append(createTime);
+        return sb.toString();
     }
 
-    public Object getCommand() {
-        return command;
+    public Message(String sessionId, String stageId, Object source) {
+        this.source = source;
+        this.sessionId = sessionId;
+        this.stageId = stageId;
     }
 
     public Object getSource() {
         return source;
     }
 
-    public Object getStage() {
-        return stage;
+    public String getSessionId() {
+        return sessionId;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("cmd:").append(command).append("\nstage:").append(stage).append("\nsource:").append(source);
-        return stringBuilder.toString();
+    public String getStageId() {
+        return stageId;
     }
 
-    public static class MessageFactory {
-        public static Message getMessageObj(Object stage, Object cmd, Object src) {
-            return new Message(cmd, src, stage);
-        }
+    public long getCreateTime() {
+        return createTime;
     }
 }

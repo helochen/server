@@ -6,14 +6,26 @@
 
     <context:annotation-config/>
 
-    <bean id="poolFactory" class="com.exchange.manager.pool.factory.SerivcesPoolFactory"/>
-
-    <bean id="groupServicePoolDispatcher" class="com.exchange.manager.pool.GroupServicePoolDispatcher">
-        <property name="poolFactory" ref="poolFactory"/>
-        <property name="runnableFactory" ref="businessController"/>
+    <!--业务处理的线程池对象-->
+    <bean id="serviceExecuor" class="com.exchange.pool.factory.business.executor.ServiceExecutorImpl"/>
+    <!--负责响应guava回调的线程池-->
+    <bean id="ioExecutor" class="com.exchange.pool.factory.io.IOSingleThreadPool">
+        <constructor-arg name="threadSize" value="1"/>
+        <constructor-arg name="queueSize" value="10"/>
+    </bean>
+    <!--负责响应构造业务线程-->
+    <bean id="runnableFactory" class="com.exchange.pool.factory.business.controller.RunnableFactoryImpl">
+        <!--这个对象在另外一个包内 game-service -->
+        <constructor-arg name="businessController" ref="businessController"/>
     </bean>
 
-    <bean class="com.exchange.manager.NodeSwapManager">
+    <bean id="groupServicePoolDispatcher" class="com.exchange.pool.GroupServicePoolDispatcher">
+        <property name="serviceExecuor" ref="serviceExecuor"/>
+        <property name="ioExecutor" ref="ioExecutor"/>
+        <property name="runnableFactory" ref="runnableFactory"/>
+    </bean>
+
+    <bean class="com.exchange.NodeSwapManager">
         <property name="groupServicePoolDispatcher" ref="groupServicePoolDispatcher"/>
     </bean>
 

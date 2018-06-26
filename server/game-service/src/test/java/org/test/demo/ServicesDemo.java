@@ -1,6 +1,5 @@
 package org.test.demo;
 
-import com.service.controller.RunnableFactory;
 import com.service.controller.impl.BusinessController;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -16,7 +15,7 @@ public class ServicesDemo {
 
         RunnableFactory runnableFactory = applicationContext.getBean(BusinessController.class);
 
-        Thread thread = new Thread(runnableFactory.getRunnable("demo", "test"));
+        /*Thread thread = new Thread(runnableFactory.getRunnable("demo", "test"));
         thread.start();
         thread.join();
         Thread thread2 = new Thread(runnableFactory.getRunnable("demo2", "test"));
@@ -24,7 +23,7 @@ public class ServicesDemo {
         thread2.join();
         Thread thread3 = new Thread(runnableFactory.getRunnable("demo3", "test123"));
         thread3.start();
-        thread3.join();
+        thread3.join();*/
 
         //System.out.println(runnableFactory.getGroup("demo"));
     }

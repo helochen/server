@@ -1,9 +1,8 @@
 package com.service.controller.impl;
 
-import com.service.annotation.EasyMapping;
-import com.service.annotation.EasyModule;
-import com.service.controller.RunnableFactory;
-import org.share.msg.Message;
+import com.annotation.EasyMapping;
+import com.annotation.EasyModule;
+import org.share.msg.IOResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -16,8 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class BusinessController implements BeanPostProcessor, RunnableFactory {
-
+public class BusinessController implements BeanPostProcessor {
     private static final Logger logger = LoggerFactory.getLogger(BusinessController.class);
     /**
      * commandInfo的key是Command对应的RouteInfo
@@ -30,6 +28,15 @@ public class BusinessController implements BeanPostProcessor, RunnableFactory {
      * 每个命令对于的组
      */
     private Map<String, String> commandModule = new HashMap<>();
+
+
+    public Map<String, RouteInfo> getCommandInfo() {
+        return commandInfo;
+    }
+
+    public Map<String, String> getCommandModule() {
+        return commandModule;
+    }
 
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 
@@ -47,7 +54,7 @@ public class BusinessController implements BeanPostProcessor, RunnableFactory {
                     routeInfo.clazz = bean.getClass();
                     routeInfo.method = method;
                     routeInfo.type = method.getReturnType();
-                    if (routeInfo.type != Message.class && routeInfo.type != void.class) {
+                    if (routeInfo.type != IOResult.class && routeInfo.type != void.class) {
                         logger.error("做了一个约定，业务层返回的数据一定是Message对象或者void,实际上:{},类:{}，方法:{}",
                                 routeInfo.type, bean.getClass(), method.getName());
                     }
@@ -70,52 +77,11 @@ public class BusinessController implements BeanPostProcessor, RunnableFactory {
         return bean;
     }
 
-    @Override
-    public Runnable getRunnable(String command, Object data) {
-
-        RouteInfo routeInfo = commandInfo.get(command);
-        if (routeInfo != null) {
-            if (routeInfo.deprecated) {
-                logger.error("客户端获取放弃的映射command:{}, bean Clazz:{}", command, routeInfo.clazz);
-                return null;
-            } else {
-                Method method = routeInfo.method;
-                Object bean = routeInfo.bean;
-                return () -> {
-                    try {
-                        Object value = method.invoke(bean, data);
-                        /**
-                         * void会返回null值
-                         */
-                        if (value != null) {
-                            /**
-                             * TODO 返回Message对象(前面做了约定)，处理Message对象
-                             */
-                            System.out.println("result:\t" + value.toString());
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        logger.error("不好了，出现错误了BusinessController->getRunnalbe:{}", command);
-                    }
-                };
-            }
-        } else {
-            logger.error("客户端获取未设置的映射command:{}", command);
-            return null;
-        }
-
-    }
-
-    @Override
-    public String getGroup(String command) {
-        return commandModule.get(command);
-    }
-
-    class RouteInfo {
+    public class RouteInfo {
         /*通过注解得到的*/
         String command;
 
-        /*Bean的Class对象*/
+        /*Bean的Class对象名称*/
         Class clazz;
 
         /*Bean注解的方法*/
@@ -135,5 +101,37 @@ public class BusinessController implements BeanPostProcessor, RunnableFactory {
 
         /*Type函数返回的类型*/
         Type type;
+
+        public String getCommand() {
+            return command;
+        }
+
+        public Class getClazz() {
+            return clazz;
+        }
+
+        public Method getMethod() {
+            return method;
+        }
+
+        public Object getBean() {
+            return bean;
+        }
+
+        public boolean isDeprecated() {
+            return deprecated;
+        }
+
+        public String getModule() {
+            return module;
+        }
+
+        public String getGroup() {
+            return group;
+        }
+
+        public Type getType() {
+            return type;
+        }
     }
 }

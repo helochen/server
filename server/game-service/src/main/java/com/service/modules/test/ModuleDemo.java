@@ -1,8 +1,9 @@
 package com.service.modules.test;
 
 
-import com.service.annotation.EasyMapping;
-import com.service.annotation.EasyModule;
+import com.annotation.EasyMapping;
+import com.annotation.EasyModule;
+import org.share.msg.IOResult;
 import org.share.msg.Message;
 import org.springframework.stereotype.Service;
 
@@ -11,19 +12,19 @@ import org.springframework.stereotype.Service;
 public class ModuleDemo {
 
     @EasyMapping(command = "demo")
-    public Message mappingDemo(Object data) {
-        System.out.println("................running.........." + data);
-        return Message.MessageFactory.getMessageObj("stageDemo", "demo", "");
+    public IOResult mappingDemo(Message msg) {
+        System.out.println("................running.........." + msg);
+        return IOResult.IOResultHelper.WorldMessageObj("stageDemo", "demo", "");
     }
 
     @EasyMapping(command = "demo2")
-    public void mappingDemo2(Object data) {
-        System.out.println("..........return void type\t" + data);
+    public void mappingDemo2(Message msg) {
+        System.out.println("..........return void type\t" + msg);
     }
 
     @EasyMapping(command = "demo3")
-    public String mappingDemo3(Object data) {
-        System.out.println("..........return void type\t" + data);
+    public String mappingDemo3(Message msg) {
+        System.out.println("..........return void type\t" + msg);
         return "123";
     }
 }
