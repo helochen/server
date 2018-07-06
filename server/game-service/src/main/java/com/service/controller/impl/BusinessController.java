@@ -2,6 +2,7 @@ package com.service.controller.impl;
 
 import com.annotation.EasyMapping;
 import com.annotation.EasyModule;
+import com.service.controller.IBusiness;
 import org.share.msg.IOResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +15,15 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ *
+ * 业务线程池发射在这里保存提供给game-exchange使用的
+ * 创建Bean的时候通过注解保持Bean的对象和方法属性
+ *
+ * */
 @Component
-public class BusinessController implements BeanPostProcessor {
+public class BusinessController implements BeanPostProcessor, IBusiness {
     private static final Logger logger = LoggerFactory.getLogger(BusinessController.class);
     /**
      * commandInfo的key是Command对应的RouteInfo
@@ -30,14 +38,6 @@ public class BusinessController implements BeanPostProcessor {
     private Map<String, String> commandModule = new HashMap<>();
 
 
-    public Map<String, RouteInfo> getCommandInfo() {
-        return commandInfo;
-    }
-
-    public Map<String, String> getCommandModule() {
-        return commandModule;
-    }
-
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 
         EasyModule bean_annotation = bean.getClass().getAnnotation(EasyModule.class);
@@ -49,7 +49,7 @@ public class BusinessController implements BeanPostProcessor {
             for (Method method : methods) {
                 EasyMapping m_annotation = method.getAnnotation(EasyMapping.class);
                 if (m_annotation != null) {
-                    RouteInfo routeInfo = new RouteInfo();
+                    RouteInfo routeInfo = new RouteInfo(m_annotation.check());
                     routeInfo.command = m_annotation.command();
                     routeInfo.clazz = bean.getClass();
                     routeInfo.method = method;
@@ -73,6 +73,34 @@ public class BusinessController implements BeanPostProcessor {
         return bean;
     }
 
+
+    @Override
+    public Method getMethod(String command) {
+        RouteInfo routeInfo = commandInfo.get(command);
+        return routeInfo == null || routeInfo.isDeprecated() ? null : routeInfo.getMethod();
+    }
+
+    @Override
+    public Object getBean(String command) {
+        RouteInfo routeInfo = commandInfo.get(command);
+        return routeInfo == null || routeInfo.isDeprecated() ? null : routeInfo.getBean();
+    }
+
+    @Override
+    public String getGroup(String command) {
+        return commandModule.get(command);
+    }
+
+    @Override
+    public int checkflag(String command, byte flag) {
+        RouteInfo routeInfo = commandInfo.get(command);
+        if (routeInfo != null) {
+            return routeInfo.check(flag);
+        } else {
+            return -1;
+        }
+    }
+
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         return bean;
     }
@@ -92,6 +120,9 @@ public class BusinessController implements BeanPostProcessor {
 
         /*是否deprecated*/
         boolean deprecated;
+
+        /*检查flag位*/
+        final byte check;
 
         /*所在模块的名称*/
         String module;
@@ -132,6 +163,14 @@ public class BusinessController implements BeanPostProcessor {
 
         public Type getType() {
             return type;
+        }
+
+        public RouteInfo(byte flag) {
+            this.check = flag;
+        }
+
+        public int check(final byte flag) {
+            return check & flag;
         }
     }
 }

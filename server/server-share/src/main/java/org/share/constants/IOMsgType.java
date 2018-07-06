@@ -19,4 +19,8 @@ public enum IOMsgType {
      * 给当前链接发送消息
      */
     SELF_IO_MSG,
+    /**
+     * 关闭当前的channel
+     */
+    SHUTDOWN_CHANNEL_MSG,
 }

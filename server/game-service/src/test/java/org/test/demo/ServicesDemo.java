@@ -13,7 +13,7 @@ public class ServicesDemo {
 
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath*:*-spring.xml");
 
-        RunnableFactory runnableFactory = applicationContext.getBean(BusinessController.class);
+        /*RunnableFactory runnableFactory = applicationContext.getBean(BusinessController.class);*/
 
         /*Thread thread = new Thread(runnableFactory.getRunnable("demo", "test"));
         thread.start();

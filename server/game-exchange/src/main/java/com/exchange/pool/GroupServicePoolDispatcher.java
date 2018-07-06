@@ -2,17 +2,17 @@ package com.exchange.pool;
 
 import com.exchange.pool.factory.business.controller.RunnableFactory;
 import com.exchange.pool.factory.business.executor.IServiceExecuor;
-import com.exchange.pool.factory.io.IIOExecutor;
-import com.google.common.util.concurrent.Futures;
+import com.exchange.pool.factory.io.controller.handler.IOResultFutureHandler;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.io.handler.IOResultFutureHandler;
 import org.share.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
+import java.util.concurrent.Callable;
+
 /**
- * exchage的核心，
+ * exchange的核心，
  * 为所有的请求做处理，整个项目的业务调度核心啦
  *
  * @Author chen
@@ -34,17 +34,6 @@ public class GroupServicePoolDispatcher {
     }
 
     /**
-     * io处理guava回调的线程池
-     */
-    private IIOExecutor ioExecutor;
-
-
-    public void setIoExecutor(IIOExecutor ioExecutor) {
-        this.ioExecutor = ioExecutor;
-    }
-
-
-    /**
      * 业务线程池控制器，game-service中的对象，Spring管理的，
      * 创建业务线程对象的管理器
      */
@@ -57,29 +46,29 @@ public class GroupServicePoolDispatcher {
 
 
     /**
-     * IO回调的处理函数哦
+     * 对业务线程的IO回调的处理
      */
     private IOResultFutureHandler ioResultFutureHandler;
 
     /**
      * 真实的分发处理消息的入口
      */
-    public void dispatcherMsg(Object[] data) {
+    public void dispatcherMsg(Message msg) {
         if (runnableFactory != null) {
-            String command = (String) data[0];
             /**
-             * TODO
-             * 转换为message
-             */
-            Runnable service = runnableFactory.getRunnable(command, new Message("", "", data[1]));
-            String group = runnableFactory.getGroup(command);
+             *
+             * */
+            Callable service = runnableFactory.getRunnable(msg);
+            String group = runnableFactory.getGroup(msg.getCommand());
 
             if (service != null || StringUtils.isEmpty(group)) {
-                logger.error("Component.Error, runnable factory cant get service thread", command);
+                logger.error("Component.Error, runnable factory cant get service thread", msg.getCommand());
             } else {
                 ListenableFuture future = serviceExecuor.execute(group, service);
-                /*TODO 是封装这个方法*/
-                Futures.addCallback(future, ioResultFutureHandler, ioExecutor.getExecutor());
+                /**
+                 * IO回调在这里，是封装这个方法
+                 * */
+                ioResultFutureHandler.addFutureHandler(future);
             }
 
         } else {
@@ -87,4 +76,7 @@ public class GroupServicePoolDispatcher {
         }
     }
 
+    public void setIoResultFutureHandler(IOResultFutureHandler ioResultFutureHandler) {
+        this.ioResultFutureHandler = ioResultFutureHandler;
+    }
 }

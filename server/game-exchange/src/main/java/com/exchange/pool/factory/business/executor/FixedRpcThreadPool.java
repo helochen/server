@@ -6,6 +6,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
 /**
@@ -53,7 +54,7 @@ public class FixedRpcThreadPool implements ICallBackRpcThreadPool {
     }
 
     @Override
-    public ListenableFuture execute(Runnable runnable) {
-        return getExecutor().submit(runnable);
+    public ListenableFuture execute(Callable callable) {
+        return getExecutor().submit(callable);
     }
 }

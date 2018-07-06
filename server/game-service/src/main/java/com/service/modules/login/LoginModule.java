@@ -13,7 +13,7 @@ public class LoginModule {
 
     @EasyMapping(command = "userLogin")
     public IOResult userLogin(Message msg) {
-        return IOResult.IOResultHelper.WorldMessageObj("" ,"" ,"");
+        return IOResult.Builder.WorldIOResult("" ,"" ,"");
     }
 
 }

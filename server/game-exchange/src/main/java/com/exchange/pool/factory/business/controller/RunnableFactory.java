@@ -2,6 +2,8 @@ package com.exchange.pool.factory.business.controller;
 
 import org.share.msg.Message;
 
+import java.util.concurrent.Callable;
+
 public interface RunnableFactory {
     /**
      * 通过命令得到业务线程
@@ -9,7 +11,7 @@ public interface RunnableFactory {
      * @Param command
      * @Param data
      * */
-    Runnable getRunnable(String command, Message msg);
+    Callable getRunnable(Message msg);
 
     /**
      * 得到线程池的组

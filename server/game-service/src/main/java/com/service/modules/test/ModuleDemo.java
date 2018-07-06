@@ -14,7 +14,7 @@ public class ModuleDemo {
     @EasyMapping(command = "demo")
     public IOResult mappingDemo(Message msg) {
         System.out.println("................running.........." + msg);
-        return IOResult.IOResultHelper.WorldMessageObj("stageDemo", "demo", "");
+        return IOResult.Builder.WorldIOResult("stageDemo", "demo", "");
     }
 
     @EasyMapping(command = "demo2")

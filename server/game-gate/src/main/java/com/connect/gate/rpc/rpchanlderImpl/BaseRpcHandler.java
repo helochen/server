@@ -22,9 +22,10 @@ public class BaseRpcHandler extends AbstractRpcHandler implements IRpcHandler<Ob
     @Override
     public void handler(Channel remote, Object data) {
         getLogger().debug("channel:{} hanlder.........", remote);
+
         if (data instanceof Object[]) {
             /*做一个事件的分发*/
-            nodeSwapManager.dispatcher((Object[])data);
+            nodeSwapManager.dispatcher(remote , (Object[])data);
         } else {
             getLogger().debug("data{} is not Object[]", data);
         }

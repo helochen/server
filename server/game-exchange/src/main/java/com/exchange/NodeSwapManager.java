@@ -3,36 +3,58 @@ package com.exchange;
 import com.exchange.pool.GroupServicePoolDispatcher;
 import com.exchange.session.SessionManager;
 import io.netty.channel.Channel;
-import org.stage.manager.ChannelManager;
+import org.share.manager.IExChangeManager;
+import org.share.manager.impl.ChannelManager;
+import org.share.msg.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NodeSwapManager {
 
-    /*负责业务*/
+    private static final Logger logger = LoggerFactory.getLogger(NodeSwapManager.class);
+    /**
+     * 负责业务
+     * */
     private GroupServicePoolDispatcher groupServicePoolDispatcher;
 
-    /*保持session*/
+    /**
+     * 保持链接session
+     * */
     private SessionManager sessionManager;
 
-    public void setGroupServicePoolDispatcher(GroupServicePoolDispatcher groupServicePoolDispatcher) {
-        this.groupServicePoolDispatcher = groupServicePoolDispatcher;
-    }
+    /**
+     * Channel容器,单例
+     */
+    private IExChangeManager exChangeManager = ChannelManager.getInstance();
+
 
     public void setSessionManager(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 
-
-    public void activeSession(io.netty.channel.Channel remote) {
-        ChannelManager.getInstance().acitve(remote);
-        System.out.println("activeSession........:D");
+    public void setGroupServicePoolDispatcher(GroupServicePoolDispatcher groupServicePoolDispatcher) {
+        this.groupServicePoolDispatcher = groupServicePoolDispatcher;
     }
 
-    public void dispatcher(Object[] data) {
-        groupServicePoolDispatcher.dispatcherMsg(data);
+
+    public void activeSession(Channel remote) {
+        exChangeManager.acitve(remote);
+        logger.info("activeSession........:D");
+    }
+
+    public void dispatcher(Channel remote, Object[] data) {
+        /**
+         * 转换Channel数据
+         * */
+        Message msgObj = exChangeManager.conver2MsgObj(remote , data);
+        /**
+         * 转换为Message对象传给服务
+         * */
+        groupServicePoolDispatcher.dispatcherMsg(msgObj);
     }
 
     public void inactiveSession(Channel remote) {
-        ChannelManager.getInstance().inactive(remote);
-        System.out.println("inactiveSession........:D");
+        exChangeManager.inactive(remote);
+        logger.info("inactiveSession........:D");
     }
 }

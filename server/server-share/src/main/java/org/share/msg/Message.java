@@ -2,10 +2,16 @@ package org.share.msg;
 
 /**
  * 统一的传入到服务方法中的对象
+ *
  * @Author chen
  * @Date 2018.6.20
  */
-public class Message {
+public final class Message {
+
+    /**
+     * 转换后得到的command
+     */
+    private String command;
 
     /**
      * Channel传递上的数据
@@ -18,11 +24,6 @@ public class Message {
     private String sessionId;
 
     /**
-     * 登陆的用户StageId,所在的场景
-     */
-    private String stageId;
-
-    /**
      * 该消息创建的事件
      */
     private long createTime = System.currentTimeMillis();
@@ -33,14 +34,24 @@ public class Message {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("sessionId:").append(sessionId).append("\tstageId:").append(stageId).append("\tcreateTime:").append(createTime);
+        sb.append("sessionId:").append(sessionId).append("\tcreateTime:").append(createTime);
         return sb.toString();
     }
 
-    public Message(String sessionId, String stageId, Object source) {
+    /**
+     * 信息标识位
+     */
+    private final byte flag;
+
+    public byte getFlag() {
+        return flag;
+    }
+
+    public Message(String sessionId, byte flag, String command, Object source) {
         this.source = source;
         this.sessionId = sessionId;
-        this.stageId = stageId;
+        this.command = command;
+        this.flag = flag;
     }
 
     public Object getSource() {
@@ -51,11 +62,11 @@ public class Message {
         return sessionId;
     }
 
-    public String getStageId() {
-        return stageId;
-    }
-
     public long getCreateTime() {
         return createTime;
+    }
+
+    public String getCommand() {
+        return command;
     }
 }

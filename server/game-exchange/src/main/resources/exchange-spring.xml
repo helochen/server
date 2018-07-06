@@ -9,7 +9,7 @@
     <!--业务处理的线程池对象-->
     <bean id="serviceExecuor" class="com.exchange.pool.factory.business.executor.ServiceExecutorImpl"/>
     <!--负责响应guava回调的线程池-->
-    <bean id="ioExecutor" class="com.exchange.pool.factory.io.IOSingleThreadPool">
+    <bean id="ioExecutor" class="com.exchange.pool.factory.io.executor.IOSingleThreadPool">
         <constructor-arg name="threadSize" value="1"/>
         <constructor-arg name="queueSize" value="10"/>
     </bean>
