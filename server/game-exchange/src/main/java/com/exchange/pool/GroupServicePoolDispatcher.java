@@ -28,27 +28,24 @@ public class GroupServicePoolDispatcher {
      */
     private IServiceExecuor serviceExecuor;
 
-
-    public void setServiceExecuor(IServiceExecuor serviceExecuor) {
-        this.serviceExecuor = serviceExecuor;
-    }
-
     /**
      * 业务线程池控制器，game-service中的对象，Spring管理的，
      * 创建业务线程对象的管理器
      */
     private RunnableFactory runnableFactory;
 
-
-    public void setRunnableFactory(RunnableFactory runnableFactory) {
-        this.runnableFactory = runnableFactory;
-    }
-
-
     /**
      * 对业务线程的IO回调的处理
      */
     private IOResultFutureHandler ioResultFutureHandler;
+
+    public void setServiceExecuor(IServiceExecuor serviceExecuor) {
+        this.serviceExecuor = serviceExecuor;
+    }
+
+    public void setRunnableFactory(RunnableFactory runnableFactory) {
+        this.runnableFactory = runnableFactory;
+    }
 
     /**
      * 真实的分发处理消息的入口

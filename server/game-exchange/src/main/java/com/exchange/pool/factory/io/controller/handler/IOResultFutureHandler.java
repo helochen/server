@@ -8,7 +8,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 import org.share.msg.IOResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 /**
  * 处理业务线程结果的回调方法
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
  * @Author chen
  * @Date 2018.6.23
  */
-@Service
 public class IOResultFutureHandler implements FutureCallback<IOResult> {
 
     private static Logger logger = LoggerFactory.getLogger(IOResultFutureHandler.class);

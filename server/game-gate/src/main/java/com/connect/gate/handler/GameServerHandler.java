@@ -29,9 +29,9 @@ public class GameServerHandler extends SimpleChannelInboundHandler<Object>{
         if (msg instanceof WebSocketFrame) {
             rpcHandler.handler(ctx.channel(), msg);
             ((WebSocketFrame) msg).retain();
-        } else {
+        }/* else {
             ctx.channel().close();
-        }
+        }*/
     }
 
     @Override

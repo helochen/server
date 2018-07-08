@@ -32,11 +32,9 @@ public class IOAction {
      */
     private IStageManager channelManager = ChannelManager.getInstance();
 
-    public void setStageManager(StageCacheManager stageManager) {
-
+    public IOAction(StageCacheManager stageManager) {
         this.stageManager = stageManager;
     }
-
 
     public void response(IOResult ioResult) {
 

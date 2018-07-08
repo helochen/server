@@ -1,7 +1,6 @@
 package com.exchange.pool.factory.business.controller;
 
 import com.service.controller.IBusiness;
-import com.service.controller.impl.BusinessController;
 import org.share.msg.IOResult;
 import org.share.msg.Message;
 import org.slf4j.Logger;
@@ -20,7 +19,7 @@ public class RunnableFactoryImpl implements RunnableFactory {
 
     private IBusiness businessController;
 
-    public RunnableFactoryImpl(BusinessController businessController) {
+    public RunnableFactoryImpl(IBusiness businessController) {
         this.businessController = businessController;
     }
 

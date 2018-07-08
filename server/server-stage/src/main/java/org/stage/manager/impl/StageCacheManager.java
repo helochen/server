@@ -3,6 +3,7 @@ package org.stage.manager.impl;
 import org.share.cache.CacheManager;
 import org.stage.IStage;
 import org.stage.session.StageSession;
+import org.stage.session.constants.StageChannelGroupType;
 
 /**
  * class StageManager
@@ -17,15 +18,19 @@ public class StageCacheManager {
     private final CacheManager<StageSession> cacheManager = CacheManager.Builder.createSyncMapContainer();
 
     /**
-     * TODO
-     * TODO
-     * TODO
-     * TODO
-     * TODO
-     */
+     *
+     *
+     *
+     *  创建唯一的全世界Stage
+     *
+     */ {
+        StageSession worldStage = new StageSession(StageChannelGroupType.GLOBAL_GROUP);
+        cacheManager.add(worldStage);
+    }
 
     /**
      * 基本的返回一个场景对象咯
+     *
      * @param stageId
      * @return
      */
@@ -36,6 +41,7 @@ public class StageCacheManager {
     /**
      * 删除一个场景对象，
      * 删除的时候需要告知所有的内在用户退出该场景
+     *
      * @param stageId
      * @return
      */

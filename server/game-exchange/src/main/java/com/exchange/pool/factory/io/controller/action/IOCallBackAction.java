@@ -15,7 +15,7 @@ public class IOCallBackAction {
     private static final Logger logger = LoggerFactory.getLogger(IOCallBackAction.class);
 
     /**
-     * 处理IO行为game-stagem中定义具体的行为
+     * 处理IO行为game-stage中定义具体的行为
      * */
     private IOAction ioAction;
 

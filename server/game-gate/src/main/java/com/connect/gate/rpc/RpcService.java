@@ -1,6 +1,7 @@
 package com.connect.gate.rpc;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.AbstractIdleService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandler;
@@ -29,8 +30,8 @@ public abstract class RpcService extends AbstractIdleService {
     private final SocketAddress localAddress;
 
 
-    public RpcService(final String address , final int port) {
-        //Stopwatch stopwatch = Stopwatch.createStarted();
+    public RpcService(final String address, final int port) {
+        Stopwatch stopwatch = Stopwatch.createStarted();
         Preconditions.checkNotNull(address);
 
         this.localAddress = new InetSocketAddress(address, port);
@@ -38,14 +39,14 @@ public abstract class RpcService extends AbstractIdleService {
         this.workerGroup = new NioEventLoopGroup();
         this.channelClass = NioServerSocketChannel.class;
 
-        //LOG.info("rpc service init {}:{} elapsed:{}", address, port, stopwatch.stop().toString());
+        LOG.info("rpc service init {}:{} elapsed:{}", address, port, stopwatch.stop().toString());
     }
 
     protected abstract ChannelHandler channelHandler();
 
     @Override
     protected void startUp() throws Exception {
-        //Stopwatch stopwatch = Stopwatch.createStarted();
+        Stopwatch stopwatch = Stopwatch.createStarted();
 
         serverBootstrap.group(bossGroup, workerGroup).channel(this.channelClass)
                 .option(ChannelOption.TCP_NODELAY, true)
@@ -55,13 +56,13 @@ public abstract class RpcService extends AbstractIdleService {
 
         serverBootstrap.bind().sync();
 
-        //LOG.info("rpc service init {}:{} elapsed:{}",localAddress, stopwatch.stop().toString());
+        LOG.info("rpc service init {}:{} elapsed:{}", localAddress, stopwatch.stop().toString());
     }
 
 
     @Override
     protected void shutDown() throws Exception {
-        //Stopwatch stopwatch = Stopwatch.createStarted();
+        Stopwatch stopwatch = Stopwatch.createStarted();
 
         // Shut down all event loops to terminate all threads.
         bossGroup.shutdownGracefully();
@@ -73,6 +74,6 @@ public abstract class RpcService extends AbstractIdleService {
         // Wait until all threads are terminated.
         workerGroup.terminationFuture().sync();
 
-        //LOG.info("rpcServer stop {} elapsed {}", localAddress, stopwatch.stop().toString());
+        LOG.info("rpcServer stop {} elapsed {}", localAddress, stopwatch.stop().toString());
     }
 }

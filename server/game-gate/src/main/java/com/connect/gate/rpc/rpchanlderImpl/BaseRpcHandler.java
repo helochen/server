@@ -15,7 +15,7 @@ public class BaseRpcHandler extends AbstractRpcHandler implements IRpcHandler<Ob
     @Override
     public void active(Channel remote) {
         getLogger().debug("channel:{} active....", remote);
-        /*TODO 链接进入，添加到MessageDispatcher内？*/
+        /* 链接进入，添加到MessageDispatcher内？*/
         nodeSwapManager.activeSession(remote);
     }
 

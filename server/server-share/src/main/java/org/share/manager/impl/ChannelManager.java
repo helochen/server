@@ -33,19 +33,21 @@ public class ChannelManager implements IExChangeManager, IBusinessManager, IStag
 
     private ChannelManager() {
     }
+
     /**
      * 通过channel获得用户信息
-     * */
+     */
     private Map<Channel, InfoSession> channelMap = new ConcurrentHashMap<>();
     /**
      * 通过SessionId获得用户信息
-     * */
+     */
     private Map<String, InfoSession> sessionIdMap = new ConcurrentHashMap<>();
 
     /**
      * 通过RoleId获得用户信息
      */
     private Map<String, InfoSession> roleIdMap = new ConcurrentHashMap<>();
+
     /**
      * active,用户链接
      */
@@ -64,7 +66,14 @@ public class ChannelManager implements IExChangeManager, IBusinessManager, IStag
      */
     @Override
     public void updateRoleIdInfo(String sessionId, String roleId) {
-        roleIdMap.put(roleId, sessionIdMap.get(sessionId));
+        InfoSession infoSession = sessionIdMap.get(sessionId);
+        if (infoSession != null) {
+            infoSession.setFlag(FlagType.LOGIN_SUCCESS);
+            roleIdMap.put(roleId, infoSession);
+            logger.info("role login success! update the session flag,role:{}", roleId);
+        } else {
+            logger.error("updateRoleInfo failed! cant find session");
+        }
     }
 
     /**
@@ -79,20 +88,6 @@ public class ChannelManager implements IExChangeManager, IBusinessManager, IStag
         } else {
             logger.warn("ChannelManager remove channel return null");
         }
-    }
-
-    /**
-     *
-     * */
-
-    /**
-     * 得到场景的ID
-     *
-     * @param channel
-     * @return
-     */
-    public String getStageId(Channel channel) {
-        return channelMap.get(channel) == null ? null : channelMap.get(channel).getStageId();
     }
 
     /**
@@ -117,10 +112,11 @@ public class ChannelManager implements IExChangeManager, IBusinessManager, IStag
         }
         return msg;
     }
+
     /**
      * 给stage模块用的咯
      * 可以得到具体的Channel咯
-     * */
+     */
     @Override
     public Channel getChannelBySessionId(String sessionId) {
         return sessionIdMap.get(sessionId).getChannel();
@@ -129,14 +125,15 @@ public class ChannelManager implements IExChangeManager, IBusinessManager, IStag
     /**
      * * 给stage模块用的咯
      * 可以得到具体的Channel咯
-     * */
+     */
     @Override
     public Channel getChannelByRoleId(String roleId) {
         return roleIdMap.get(roleId).getChannel();
     }
+
     /**
-     * 释放到内存空间
-     * */
+     * 释放空间
+     */
     @Override
     public void releaseSession(String sessionId) {
         InfoSession infoSession = sessionIdMap.remove(sessionId);
@@ -146,12 +143,10 @@ public class ChannelManager implements IExChangeManager, IBusinessManager, IStag
         }
     }
 
-    class InfoSession {
+    private class InfoSession {
         private long roleId;
 
         private String userId;
-
-        private String StageId;
 
         private Channel channel;
 
@@ -192,14 +187,6 @@ public class ChannelManager implements IExChangeManager, IBusinessManager, IStag
             this.userId = userId;
         }
 
-        public String getStageId() {
-            return StageId;
-        }
-
-        public void setStageId(String stageId) {
-            StageId = stageId;
-        }
-
         public void setExtraParams(String key, String value) {
             params.put(key, value);
         }
@@ -210,6 +197,10 @@ public class ChannelManager implements IExChangeManager, IBusinessManager, IStag
 
         public Channel getChannel() {
             return channel;
+        }
+
+        protected void setFlag(byte flag) {
+            this.flag = flag;
         }
     }
 }
