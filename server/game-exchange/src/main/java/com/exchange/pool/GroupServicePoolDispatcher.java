@@ -58,7 +58,7 @@ public class GroupServicePoolDispatcher {
             Callable service = runnableFactory.getRunnable(msg);
             String group = runnableFactory.getGroup(msg.getCommand());
 
-            if (service != null || StringUtils.isEmpty(group)) {
+            if (service == null || StringUtils.isEmpty(group)) {
                 logger.error("Component.Error, runnable factory cant get service thread", msg.getCommand());
             } else {
                 ListenableFuture future = serviceExecuor.execute(group, service);

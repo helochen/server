@@ -22,7 +22,7 @@ public class ServiceExecutorImpl implements IServiceExecuor {
     private Map<String, ICallBackRpcThreadPool> runpool = new ConcurrentHashMap<>();
 
     private ICallBackRpcThreadPool get(String group) {
-        if (runpool.containsKey(group)) {
+        if (!runpool.containsKey(group)) {
             logger.info("创建{}组线程池", group);
             runpool.put(group, new FixedRpcThreadPool());
         }
