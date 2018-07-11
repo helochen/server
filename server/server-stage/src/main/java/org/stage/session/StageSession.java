@@ -1,7 +1,9 @@
 package org.stage.session;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.DefaultEventExecutor;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import org.share.cache.ICache;
@@ -78,13 +80,13 @@ public class StageSession implements IStage , ICache {
     }
 
     /**
-     * 写即刻发送
+     * 写数据ByteBuf
      *
-     * @param data
+     * @param byteBuf
      */
     @Override
-    public void writeAndSend(byte[] data) {
-        stageChannels.writeAndFlush(data);
+    public void writeAndSend(ByteBuf byteBuf) {
+        stageChannels.writeAndFlush(byteBuf);
     }
 
     /**

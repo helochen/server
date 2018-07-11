@@ -1,5 +1,7 @@
 package com.connect.gate;
 
+import com.connect.gate.codec.WebSocketLengthDecoder;
+import com.connect.gate.codec.WebSocketLengthEncoder;
 import com.connect.gate.handler.GameServerHandler;
 import com.connect.gate.rpc.IRpcHandler;
 import com.connect.gate.rpc.RpcService;
@@ -13,6 +15,8 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.nio.channels.SocketChannel;
 
 public class GateServer extends RpcService {
 
@@ -34,15 +38,18 @@ public class GateServer extends RpcService {
     }
 
     protected ChannelHandler channelHandler() {
-        return new ChannelInitializer<Channel>() {
+
+        return new ChannelInitializer() {
             @Override
-            protected void initChannel(Channel channel) throws Exception {
-                ChannelPipeline channelPipeline = channel.pipeline();
+            protected void initChannel(Channel ch) throws Exception {
+                ChannelPipeline channelPipeline = ch.pipeline();
 
                 channelPipeline.addLast(new HttpServerCodec())
                         .addLast(new HttpObjectAggregator(65535))
                         .addLast(new ChunkedWriteHandler())
-                        .addLast(new WebSocketServerProtocolHandler("", "", true))
+                        .addLast(new WebSocketServerProtocolHandler("/", "", false))
+                        .addLast(new WebSocketLengthDecoder())
+                        .addLast(new WebSocketLengthEncoder())
                         .addLast(new GameServerHandler(handler));
             }
         };

@@ -65,7 +65,7 @@ public final class IOResult {
         this.targets = targetIds;
     }
 
-    public Object getCommand() {
+    public String getCommand() {
         return command;
     }
 
@@ -105,7 +105,6 @@ public final class IOResult {
          * 给全链接用户消息
          *
          * @param cmd
-         * @param stageId
          * @param src
          * @return
          */

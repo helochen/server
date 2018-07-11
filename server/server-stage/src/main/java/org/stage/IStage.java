@@ -1,5 +1,7 @@
 package org.stage;
 
+import io.netty.buffer.ByteBuf;
+
 /**
  * 负责场景内channel的服务功能
  * @Author chen
@@ -19,10 +21,9 @@ public interface IStage {
     void write(byte[] data);
 
     /**
-     * 写即刻发送
+     * 写数据ByteBuf
      */
-    void writeAndSend(byte[] data);
-
+    void writeAndSend(ByteBuf byteBuf);
     /**
      * 是否在场景内,用户的ID
      */

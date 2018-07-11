@@ -5,6 +5,9 @@ import com.google.common.base.Preconditions;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
@@ -12,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 
 @ChannelHandler.Sharable
-public class GameServerHandler extends SimpleChannelInboundHandler<Object>{
+public class GameServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private static final Logger log = LoggerFactory.getLogger("RPC_HANDLER");
 
@@ -26,24 +29,21 @@ public class GameServerHandler extends SimpleChannelInboundHandler<Object>{
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg instanceof WebSocketFrame) {
-            rpcHandler.handler(ctx.channel(), msg);
-            ((WebSocketFrame) msg).retain();
-        }/* else {
-            ctx.channel().close();
-        }*/
+        rpcHandler.handler(ctx.channel(), msg);
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         rpcHandler.active(ctx.channel());
-        log.debug("channel :{} active............" , ctx.channel());
+        log.debug("channel :{} active............", ctx.channel());
+        super.channelActive(ctx);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         rpcHandler.inactive(ctx.channel());
         log.debug("channel :{} inactive..............", ctx.channel());
+        super.channelInactive(ctx);
     }
 
 
