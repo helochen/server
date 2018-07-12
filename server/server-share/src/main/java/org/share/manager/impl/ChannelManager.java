@@ -1,5 +1,6 @@
 package org.share.manager.impl;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import org.share.command.FlagType;
 import org.share.manager.IBusinessManager;

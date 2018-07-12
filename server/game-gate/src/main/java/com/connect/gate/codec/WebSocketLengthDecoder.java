@@ -1,7 +1,6 @@
 package com.connect.gate.codec;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
@@ -54,14 +53,13 @@ public class WebSocketLengthDecoder extends MessageToMessageDecoder<BinaryWebSoc
 
             int cmd = in.readInt();/*这就是command命令了*/
 
-            /*ByteBuf data = ctx.alloc().compositeBuffer().alloc().heapBuffer(length - 2 * 4);
-            in.readBytes(data);
-            out.add(new Object[]{cmd, data.retain()});*/
-            byte[] content = new byte[in.readableBytes()];
-            in.readBytes(content);
+            byte[] bytes = new byte[in.readableBytes()];
 
-            out.add(new Object[]{cmd , content});
+            in.readBytes(bytes);
+
+            out.add(new Object[]{cmd, bytes});
         }
+
 
     }
 }
