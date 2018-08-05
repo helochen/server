@@ -2,9 +2,9 @@ package com.exchange.pool.factory.io.controller.action;
 
 
 import org.share.msg.IOResult;
+import org.share.tunnel.IIOTunnel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.stage.io.IOAction;
 
 
 /**
@@ -17,11 +17,11 @@ public class IOCallBackAction {
     /**
      * 处理IO行为game-stage中定义具体的行为
      * */
-    private IOAction ioAction;
+    private IIOTunnel iioTunnel;
 
     public void response(IOResult ioResult) {
         if (ioResult != null) {
-            ioAction.response(ioResult);
+            iioTunnel.response(ioResult);
         }
     }
 
@@ -29,7 +29,7 @@ public class IOCallBackAction {
         logger.error("出现了一个异常:{}", throwable.getMessage());
     }
 
-    public void setIoAction(IOAction ioAction) {
-        this.ioAction = ioAction;
+    public void setIioTunnel(IIOTunnel iioTunnel) {
+        this.iioTunnel = iioTunnel;
     }
 }

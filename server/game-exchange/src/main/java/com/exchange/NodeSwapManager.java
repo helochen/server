@@ -5,6 +5,7 @@ import io.netty.channel.Channel;
 import org.share.manager.IExChangeManager;
 import org.share.manager.impl.ChannelManager;
 import org.share.msg.Message;
+import org.share.tunnel.IBusinessServiceDispather;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,7 @@ public class NodeSwapManager {
     /**
      * 负责业务
      * */
-    private GroupServicePoolDispatcher groupServicePoolDispatcher;
+    private IBusinessServiceDispather groupServicePoolDispatcher;
 
     /**
      * Channel容器,单例

@@ -5,6 +5,7 @@ import com.exchange.pool.factory.business.executor.IServiceExecuor;
 import com.exchange.pool.factory.io.controller.handler.IOResultFutureHandler;
 import com.google.common.util.concurrent.ListenableFuture;
 import org.share.msg.Message;
+import org.share.tunnel.IBusinessServiceDispather;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -18,7 +19,7 @@ import java.util.concurrent.Callable;
  * @Author chen
  * @Date 2018.6.25
  */
-public class GroupServicePoolDispatcher {
+public class GroupServicePoolDispatcher implements IBusinessServiceDispather {
 
     private static final Logger logger = LoggerFactory.getLogger("Component.Error");
 
@@ -50,6 +51,7 @@ public class GroupServicePoolDispatcher {
     /**
      * 真实的分发处理消息的入口
      */
+    @Override
     public void dispatcherMsg(Message msg) {
         if (runnableFactory != null) {
             /**

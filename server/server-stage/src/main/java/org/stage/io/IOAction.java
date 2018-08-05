@@ -7,6 +7,7 @@ import org.share.constants.IOMsgType;
 import org.share.manager.IStageManager;
 import org.share.manager.impl.ChannelManager;
 import org.share.msg.IOResult;
+import org.share.tunnel.IIOTunnel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.stage.IStage;
@@ -20,7 +21,7 @@ import org.stage.session.StageSession;
  * @Author chens
  * @Date 2018/7/6
  */
-public class IOAction {
+public class IOAction implements IIOTunnel{
 
     private static final Logger logger = LoggerFactory.getLogger(IOAction.class);
 
@@ -38,6 +39,7 @@ public class IOAction {
         this.stageManager = stageManager;
     }
 
+    @Override
     public void response(IOResult ioResult) {
 
         ByteBuf target = null;
@@ -100,7 +102,7 @@ public class IOAction {
                  * */
                 channelManager.releaseSession(sessionId);
             } else {
-                logger.info("已经清理掉了?");
+                logger.info("已经清理掉了?sessionId:{}", sessionId);
             }
         } else {
             logger.info("怎么做到的??? ioResult:{}", ioResult);

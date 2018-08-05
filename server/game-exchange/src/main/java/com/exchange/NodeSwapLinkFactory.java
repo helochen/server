@@ -10,13 +10,14 @@ import com.exchange.pool.factory.io.controller.handler.IOResultFutureHandler;
 import com.exchange.pool.factory.io.executor.IIOExecutor;
 import com.exchange.pool.factory.io.executor.IOSingleThreadPool;
 import com.service.controller.IBusiness;
+import org.share.tunnel.IIOTunnel;
+import org.share.tunnel.PublicMsgSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.stage.io.IOAction;
 
 /**
  * class NodeSwapManagerRun
- * function:
+ * function: 就是初始化一些变量，互相依赖的太恶心，没办法。就这水平吧
  *
  * @Author chens
  * @Date 2018/7/8
@@ -25,16 +26,16 @@ public class NodeSwapLinkFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(NodeSwapManager.class);
 
-    public static NodeSwapManager LinkServices(IBusiness business, IOAction ioAction) {
+    public static NodeSwapManager LinkServices(IBusiness business, IIOTunnel ioAction) {
         NodeSwapManager nodeSwapManager = null;
 
         if (business == null || ioAction == null) {
-            logger.error("create nodeswapMananger failed ! same parameters is null!");
+            logger.error("create nodeSwapManager failed! some key parameters is null!");
         } else {
 
             IOCallBackAction ioCallBackAction = new IOCallBackAction();
 
-            ioCallBackAction.setIoAction(ioAction);
+            ioCallBackAction.setIioTunnel(ioAction);
 
             /*负责io的业务的线程池*/
             IIOExecutor iioExecutor = new IOSingleThreadPool(1, 10);
@@ -60,6 +61,20 @@ public class NodeSwapLinkFactory {
 
             /*就是要创建这个对象*/
             nodeSwapManager = new NodeSwapManager(groupServicePoolDispatcher);
+
+            /*这里可以让业务线程随意的推送信息给客户段*/
+            PublicMsgSender.setIoTunnel(ioAction);
+
+            /**
+             * 
+             * 通过创建这个对象GroupServicePoolDispatcher,可以实现业务给业务发送消息，也可以实现场景给业务发送消息
+             * 实现PublicMsgSender的另外一个方法可以让他们可以互相的传递消息
+             * 想法：
+             *     直接通过获取groupServicePoolDispatcher发送新的事件
+             *     业务代码内通过构建正确的Message msg对象
+             *     groupServicePoolDispatcher.dispatcherMsg(msg)
+             * */
+            PublicMsgSender.setBusinessServiceDispather(groupServicePoolDispatcher);
 
             logger.info("NodeSwapManager create Instance....");
         }
