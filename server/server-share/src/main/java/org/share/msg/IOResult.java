@@ -51,6 +51,11 @@ public final class IOResult {
         this.ioMsgType = ioMsgType;
     }
 
+    private IOResult(String cmd, String sessionId, String stageId, Object src, IOMsgType ioMsgType) {
+        this(cmd, stageId, src, ioMsgType);
+        this.sessionId = sessionId;
+    }
+
     /**
      * 额外的指定的用户
      *
@@ -145,8 +150,8 @@ public final class IOResult {
          * @param src
          * @return
          */
-        public static IOResult SelfIOResult(String cmd, String stageId, Object src) {
-            return new IOResult(cmd, stageId, src, IOMsgType.SELF_IO_MSG);
+        public static IOResult SelfIOResult(String cmd, String sessionId, String stageId, Object src) {
+            return new IOResult(cmd, sessionId, stageId, src, IOMsgType.SELF_IO_MSG);
         }
 
         /**

@@ -28,7 +28,7 @@
     <dependencies>
         <dependency>
             <groupId>prj.cute.demo</groupId>
-            <artifactId>game-server</artifactId>
+            <artifactId>server-gate</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

@@ -51,7 +51,7 @@ public class WebSocketLengthEncoder extends MessageToByteEncoder<ByteBuf> {
                 }
             } else {
                 out.writeBytes(msg);
-                ctx.channel().writeAndFlush(out.retain());
+                ctx.channel().writeAndFlush(new BinaryWebSocketFrame(out.retain()));
             }
         }
     }

@@ -11,13 +11,13 @@
 
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>game-exchange</artifactId>
+    <artifactId>server-exchange</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>org.wechat.docker</groupId>
-            <artifactId>game-service</artifactId>
+            <artifactId>server-service</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

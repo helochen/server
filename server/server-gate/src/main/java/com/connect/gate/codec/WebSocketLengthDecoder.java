@@ -36,9 +36,10 @@ public class WebSocketLengthDecoder extends MessageToMessageDecoder<BinaryWebSoc
         ByteBuf in = msg.content();
 
         /**
-         * byte结构，长度|命令(int)|byte[]
+         * byte结构，长度(命令长度+byte的长度)|命令(int)|byte[]
          * */
         if (in.readableBytes() >= 8) {
+
             int length = in.readInt();
             if (length > 65535) {
                 logger.error("消息的长度大于65535!!!! {}", length);

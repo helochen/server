@@ -9,9 +9,9 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>game-service</module>
-        <module>game-gate</module>
-        <module>game-exchange</module>
+        <module>server-service</module>
+        <module>server-gate</module>
+        <module>server-exchange</module>
         <module>server-run</module>
         <module>server-stage</module>
         <module>server-share</module>
