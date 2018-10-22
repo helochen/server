@@ -1,6 +1,5 @@
 package org.share.manager.impl;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import org.share.command.FlagType;
 import org.share.manager.IBusinessManager;
@@ -84,6 +83,7 @@ public class ChannelManager implements IExChangeManager, IBusinessManager, IStag
     public void inactive(Channel channel) {
         InfoSession infoSession = channelMap.remove(channel);
         if (infoSession != null) {
+            logger.info("ChannelManager clear memory......");
             sessionIdMap.remove(infoSession.getSessionId());
             roleIdMap.remove(infoSession.getRoleId());
         } else {

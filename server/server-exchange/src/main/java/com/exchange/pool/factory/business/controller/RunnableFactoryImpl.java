@@ -52,6 +52,7 @@ public class RunnableFactoryImpl implements RunnableFactory {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         logger.error("不好了，出现错误了BusinessController->getRunnalbe:{}", msg.getCommand());
+                        result = null;
                     } finally {
                         return result;
                     }
@@ -63,15 +64,9 @@ public class RunnableFactoryImpl implements RunnableFactory {
             }
         } else {
             logger.error("没有通过session中的flag位检测，是不是哪里有问题>>>>>command:{} flag:{}", msg.getCommand(), msg.getFlag());
-            return shutDown;
+            return ()->IOResult.Builder.ShutDownSessionIOResult(msg.getSessionId());
         }
     }
-
-    /**
-     * 无限的进入而不多次构造对象
-     * 通知Channel关闭,删除session
-     */
-    private Callable shutDown = () -> IOResult.Builder.ShutDownSessionIOResult();
 
     @Override
     public String getGroup(String command) {

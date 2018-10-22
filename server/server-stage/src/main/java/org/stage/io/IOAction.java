@@ -10,6 +10,7 @@ import org.share.msg.IOResult;
 import org.share.tunnel.IIOTunnel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.stage.IStage;
 import org.stage.manager.impl.StageCacheManager;
 import org.stage.session.StageSession;
@@ -94,15 +95,15 @@ public class IOAction implements IIOTunnel{
 
         } else if (IOMsgType.SHUTDOWN_CHANNEL_MSG == ioResult.IoMsgType() || IOMsgType.NEVER_USE == ioResult.IoMsgType()) {
             String sessionId = ioResult.getSessionId();
-            Channel remote = channelManager.getChannelBySessionId(sessionId);
-            if (remote != null && remote.isActive()) {
-                remote.close();
-                /**
-                 * 清理到ChannelManager里面的对象，解放内存空间
-                 * */
-                channelManager.releaseSession(sessionId);
-            } else {
-                logger.info("已经清理掉了?sessionId:{}", sessionId);
+            if (StringUtils.isEmpty(sessionId)) {
+                logger.error("关闭Channel的时候SessionId为空!");
+            }else{
+                Channel remote = channelManager.getChannelBySessionId(sessionId);
+                if (remote != null && remote.isActive()) {
+                    remote.close();
+                } else {
+                    logger.info("已经清理掉了?sessionId:{}", sessionId);
+                }
             }
         } else {
             logger.info("怎么做到的??? ioResult:{}", ioResult);

@@ -56,7 +56,7 @@ public abstract class RpcService extends AbstractIdleService {
 
         serverBootstrap.bind().sync();
 
-        LOG.info("rpc service init {}:{} elapsed:{}", localAddress, stopwatch.stop().toString());
+        LOG.info("rpc service init localAddress:{} elapsed:{}", localAddress, stopwatch.stop().toString());
     }
 
 

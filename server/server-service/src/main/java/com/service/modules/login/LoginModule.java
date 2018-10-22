@@ -10,7 +10,7 @@ import org.share.manager.IBusinessManager;
 import org.share.manager.impl.ChannelManager;
 import org.share.msg.IOResult;
 import org.share.msg.Message;
-import org.share.tunnel.proto.awesomepackage.Awesome;
+import org.share.tunnel.proto.login.Login;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,25 +18,31 @@ import org.springframework.stereotype.Service;
 public class LoginModule {
 
 
-    @EasyMapping(command = MsgType.USER_LOGIN, check = FlagType.ACTIVE_INIT)
-    public IOResult userLogin(Message msg) throws InvalidProtocolBufferException {
+	@EasyMapping(command = MsgType.USER_LOGIN, check = FlagType.ACTIVE_INIT & FlagType.LOGIN_SUCCESS)
+	public IOResult userLogin(Message msg) throws InvalidProtocolBufferException {
 
-        IBusinessManager businessManager = ChannelManager.getInstance();
+		IBusinessManager businessManager = ChannelManager.getInstance();
 
 
-        byte[] data = (byte[]) msg.getSource();
-        Awesome.AwesomeMessage awesomeMessage = Awesome.AwesomeMessage.parseFrom(data);
+		byte[] data = (byte[]) msg.getSource();
 
-        String awesomeStr = awesomeMessage.getAwesomeField();
-        System.out.println("===============================" + awesomeStr);
-        /**
-         * 假设登陆成功，返回了信息
-         * */
-        String roleId = "testLogin";
+		Login.roleLoginRequest loginRequest = Login.roleLoginRequest.parseFrom(data);
 
-        businessManager.updateRoleIdInfo(msg.getSessionId(), roleId);
+		if ("chen".equals(loginRequest.getUserName()) && "master".equals(loginRequest.getPassWord())) {
+			System.out.println("===============================" + loginRequest.getUserName() + "\t" + loginRequest.getPassWord());
+			/**
+			 * 假设登陆成功，返回了信息
+			 * */
+			String roleId = loginRequest.getUserName();
 
-        return IOResult.Builder.SelfIOResult(MsgType.USER_LOGIN, msg.getSessionId(), null, "login".getBytes());
-    }
+			businessManager.updateRoleIdInfo(msg.getSessionId(), roleId);
+
+
+			return IOResult.Builder.SelfIOResult(MsgType.USER_LOGIN, msg.getSessionId(), null, "login".getBytes());
+
+		} else {
+			return IOResult.Builder.ShutDownSessionIOResult(msg.getSessionId());
+		}
+	}
 
 }

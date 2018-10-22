@@ -157,8 +157,8 @@ public final class IOResult {
         /**
          * 关闭当前的Channel
          */
-        public static IOResult ShutDownSessionIOResult() {
-            return new IOResult(null, null, null, IOMsgType.SHUTDOWN_CHANNEL_MSG);
+        public static IOResult ShutDownSessionIOResult(String sessionId) {
+            return new IOResult(null, sessionId ,null, null, IOMsgType.SHUTDOWN_CHANNEL_MSG);
         }
     }
 }
