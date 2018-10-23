@@ -10,6 +10,7 @@ import org.share.manager.IBusinessManager;
 import org.share.manager.impl.ChannelManager;
 import org.share.msg.IOResult;
 import org.share.msg.Message;
+import org.share.tunnel.PublicMsgSender;
 import org.share.tunnel.proto.login.Login;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class LoginModule {
 
 
-	@EasyMapping(command = MsgType.USER_LOGIN, check = FlagType.ACTIVE_INIT & FlagType.LOGIN_SUCCESS)
+	@EasyMapping(command = MsgType.USER_LOGIN, check = FlagType.ACTIVE_INIT | FlagType.LOGIN_SUCCESS)
 	public IOResult userLogin(Message msg) throws InvalidProtocolBufferException {
 
 		IBusinessManager businessManager = ChannelManager.getInstance();
@@ -45,4 +46,23 @@ public class LoginModule {
 		}
 	}
 
+	@EasyMapping(command = MsgType.USER_LOIGNOUT)
+	public IOResult userLoginOut(Message msg) throws InvalidProtocolBufferException {
+
+		IBusinessManager businessManager = ChannelManager.getInstance();
+
+		byte[] data = (byte[]) msg.getSource();
+
+		Login.roleLoginOutRequest loginOutRequest = Login.roleLoginOutRequest.parseFrom(data);
+
+		String roleId = loginOutRequest.getUserName();
+
+
+		if(businessManager.checkLoginStatus(roleId)){
+			System.out.println("==========直接发送消息======================");
+			PublicMsgSender.Send2Msg(IOResult.Builder.SelfIOResult(MsgType.USER_LOIGNOUT, msg.getSessionId(), null, "loginout".getBytes()));
+		}
+
+		return IOResult.Builder.ShutDownSessionIOResult(msg.getSessionId());
+	}
 }

@@ -14,4 +14,9 @@ public interface IBusinessManager {
      * 将对象放入RoleId
      */
     void updateRoleIdInfo(String sessionId, String roleId);
+
+    /**
+     * 删除退出
+     * */
+	boolean checkLoginStatus(String roleId);
 }
