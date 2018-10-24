@@ -6,9 +6,9 @@ import com.exchange.NodeSwapLinkFactory;
 import com.exchange.NodeSwapManager;
 import com.service.controller.IBusiness;
 import com.service.controller.impl.BusinessController;
+import org.share.tunnel.IIOTunnel;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.stage.io.IOAction;
 
 public class ServerMain {
 
@@ -17,7 +17,7 @@ public class ServerMain {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath*:/*-spring.xml");
 
         IBusiness business = applicationContext.getBean(BusinessController.class);
-        IOAction ioAction = applicationContext.getBean(IOAction.class);
+	    IIOTunnel ioAction = applicationContext.getBean(IIOTunnel.class);
 
         NodeSwapManager nodeSwapManager = NodeSwapLinkFactory.LinkServices(business, ioAction);
 

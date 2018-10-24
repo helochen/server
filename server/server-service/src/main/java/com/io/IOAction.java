@@ -1,4 +1,4 @@
-package org.stage.io;
+package com.io;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -10,10 +10,8 @@ import org.share.msg.IOResult;
 import org.share.tunnel.IIOTunnel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.stage.IStage;
-import org.stage.manager.impl.StageCacheManager;
-import org.stage.session.StageSession;
 
 /**
  * class IOAction
@@ -22,23 +20,16 @@ import org.stage.session.StageSession;
  * @Author chens
  * @Date 2018/7/6
  */
+@Component("iioTunnel")
 public class IOAction implements IIOTunnel{
 
     private static final Logger logger = LoggerFactory.getLogger(IOAction.class);
-
-    /**
-     * Stage 所有的对象缓存
-     */
-    private StageCacheManager stageManager;
 
     /**
      * 创建内存对象的管理器，我们可以得到具体的Channel
      */
     private IStageManager channelManager = ChannelManager.getInstance();
 
-    public IOAction(StageCacheManager stageManager) {
-        this.stageManager = stageManager;
-    }
 
     @Override
     public void response(IOResult ioResult) {
@@ -69,18 +60,6 @@ public class IOAction implements IIOTunnel{
             String sessionId = ioResult.getSessionId();
             Channel remote = channelManager.getChannelBySessionId(sessionId);
             remote.writeAndFlush(target);
-
-        } else if (ioResult.IoMsgType() == IOMsgType.WORLD_IO_MSG) {
-            IStage stage = stageManager.getStage(StageSession.WORLD_STAGE_KEY);
-            stage.writeAndSend(target);
-        } else if (ioResult.IoMsgType() == IOMsgType.STAGE_IO_MSG) {
-
-            IStage stage = stageManager.getStage(ioResult.getStageId());
-            if (stage != null) {
-                stage.writeAndSend(target);
-            } else {
-                logger.info("场景是空的？ioResult:{}", ioResult);
-            }
 
         } else if (ioResult.IoMsgType() == IOMsgType.TARGET_IO_MSG) {
 

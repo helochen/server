@@ -7,5 +7,5 @@
     <context:annotation-config/>
     <context:component-scan base-package="com.service.controller"/>
     <context:component-scan base-package="com.service.modules"/>
-
+    <context:component-scan base-package="com.io"/>
 </beans>

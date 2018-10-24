@@ -6,10 +6,5 @@
 
     <context:annotation-config/>
 
-    <!--管理Stage场景一些信息的对象-->
-    <bean id="stageManager" class="org.stage.manager.impl.StageCacheManager"/>
-    <!--处理IO的对象-->
-    <bean id="iioTunnel" class="org.stage.io.IOAction">
-        <constructor-arg name="stageManager" ref="stageManager"/>
-    </bean>
+    <context:component-scan base-package="org.stage.manager.impl"/>
 </beans>

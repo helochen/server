@@ -1,6 +1,7 @@
 package org.stage.manager.impl;
 
 import org.share.cache.CacheManager;
+import org.springframework.stereotype.Component;
 import org.stage.IStage;
 import org.stage.session.StageSession;
 import org.stage.session.constants.StageChannelGroupType;
@@ -13,6 +14,7 @@ import org.stage.session.constants.StageChannelGroupType;
  * @Author chens
  * @Date 2018/7/1
  */
+@Component
 public class StageCacheManager {
 
     private final CacheManager<StageSession> cacheManager = CacheManager.Builder.createSyncMapContainer();

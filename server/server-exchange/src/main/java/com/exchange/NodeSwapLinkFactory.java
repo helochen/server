@@ -77,6 +77,12 @@ public class NodeSwapLinkFactory {
             PublicMsgSender.setBusinessServiceDispather(groupServicePoolDispatcher);
 
             logger.info("NodeSwapManager create Instance....");
+
+            /**
+             *
+             * TODO 如何正确的管理场景呢？
+             *
+             * */
         }
 
         return nodeSwapManager;
