@@ -53,15 +53,6 @@ public class StageSession implements IStage , ICache {
     }
 
     /**
-     * 是否支持自由退出
-     */
-    private boolean quitFreedom = true;
-    /**
-     * 场景内用户ID
-     */
-    private Vector<Long> roles = new Vector<>(20);
-
-    /**
      * 给场景内的channels发送消息
      */
     @Override
@@ -87,36 +78,6 @@ public class StageSession implements IStage , ICache {
     @Override
     public void writeAndSend(ByteBuf byteBuf) {
         stageChannels.writeAndFlush(byteBuf);
-    }
-
-    /**
-     * 是否在场景内,用户的ID
-     *
-     * @param roleId
-     */
-    @Override
-    public boolean checkInStage(long roleId) {
-        return false;
-    }
-
-    /**
-     * 加入场景
-     *
-     * @param roleId
-     */
-    @Override
-    public boolean joinStage(long roleId) {
-        return roles.add(roleId);
-    }
-
-    /**
-     * 退出场景
-     *
-     * @param roleId
-     */
-    @Override
-    public boolean exitStage(long roleId) {
-        return roles.remove(roleId);
     }
 
     /**

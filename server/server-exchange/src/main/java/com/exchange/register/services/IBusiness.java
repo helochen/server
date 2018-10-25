@@ -1,4 +1,4 @@
-package com.service.controller;
+package com.exchange.register.services;
 
 import java.lang.reflect.Method;
 

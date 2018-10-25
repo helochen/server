@@ -24,18 +24,5 @@ public interface IStage {
      * 写数据ByteBuf
      */
     void writeAndSend(ByteBuf byteBuf);
-    /**
-     * 是否在场景内,用户的ID
-     */
-    boolean checkInStage(long roleId);
 
-    /**
-     * 加入场景
-     */
-    boolean joinStage(long roleId);
-
-    /**
-     * 退出场景
-     */
-    boolean exitStage(long roleId);
 }

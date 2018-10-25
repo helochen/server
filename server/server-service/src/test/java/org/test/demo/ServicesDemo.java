@@ -1,6 +1,5 @@
 package org.test.demo;
 
-import com.service.controller.impl.BusinessController;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

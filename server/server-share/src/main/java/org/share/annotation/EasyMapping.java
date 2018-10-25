@@ -1,4 +1,4 @@
-package com.annotation;
+package org.share.annotation;
 
 
 import org.share.command.FlagType;

@@ -107,29 +107,6 @@ public final class IOResult {
 
     public static class Builder {
         /**
-         * 给全链接用户消息
-         *
-         * @param cmd
-         * @param src
-         * @return
-         */
-        public static IOResult WorldIOResult(String cmd, Object src) {
-            return new IOResult(cmd, null, src, IOMsgType.WORLD_IO_MSG);
-        }
-
-        /**
-         * 给全场景用户发送消息对象
-         *
-         * @param cmd
-         * @param stageId
-         * @param src
-         * @return
-         */
-        public static IOResult StageIOResult(String cmd, String stageId, Object src) {
-            return new IOResult(cmd, stageId, src, IOMsgType.STAGE_IO_MSG);
-        }
-
-        /**
          * 给指定目标发送消息对象
          *
          * @param cmd

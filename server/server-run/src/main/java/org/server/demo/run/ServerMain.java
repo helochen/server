@@ -4,8 +4,7 @@ import com.connect.gate.GateServer;
 import com.connect.gate.rpc.rpchanlderImpl.BaseRpcHandler;
 import com.exchange.NodeSwapLinkFactory;
 import com.exchange.NodeSwapManager;
-import com.service.controller.IBusiness;
-import com.service.controller.impl.BusinessController;
+import com.exchange.register.services.IBusiness;
 import org.share.tunnel.IIOTunnel;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -16,7 +15,7 @@ public class ServerMain {
 
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath*:/*-spring.xml");
 
-        IBusiness business = applicationContext.getBean(BusinessController.class);
+        IBusiness business = applicationContext.getBean(IBusiness.class);
 	    IIOTunnel ioAction = applicationContext.getBean(IIOTunnel.class);
 
         NodeSwapManager nodeSwapManager = NodeSwapLinkFactory.LinkServices(business, ioAction);

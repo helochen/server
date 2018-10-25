@@ -1,11 +1,12 @@
-package com.service.modules.login;
+package com.modules.login;
 
-import com.annotation.EasyMapping;
-import com.annotation.EasyModule;
 import com.constants.Module;
 import com.google.protobuf.InvalidProtocolBufferException;
+import org.share.annotation.EasyMapping;
+import org.share.annotation.EasyModule;
 import org.share.command.FlagType;
 import org.share.command.MsgType;
+import org.share.command.StageMsgType;
 import org.share.manager.IBusinessManager;
 import org.share.manager.impl.ChannelManager;
 import org.share.msg.IOResult;
@@ -37,6 +38,10 @@ public class LoginModule {
 			String roleId = loginRequest.getUserName();
 
 			businessManager.updateRoleIdInfo(msg.getSessionId(), roleId);
+
+			Message tmp = new Message(msg.getSessionId() , msg.getFlag() , StageMsgType.LOGIN_ENTER_STAGE , null);
+
+			PublicMsgSender.SendInnerMsg(tmp);
 
 
 			return IOResult.Builder.SelfIOResult(MsgType.USER_LOGIN, msg.getSessionId(), null, "login".getBytes());
