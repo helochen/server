@@ -9,19 +9,23 @@ package org.share.command;
  */
 public interface FlagType {
 
-    /**
-     * 初始化的标识
-     * */
-    byte ACTIVE_INIT = 1;
+	/**
+	 * 初始化的标识
+	 */
+	byte ACTIVE_INIT = 1;
 
-    /**
-     * 已经登陆成功标识
-     */
-    byte LOGIN_SUCCESS = 1 << 1;
+	/**
+	 * 已经登陆成功标识
+	 */
+	byte LOGIN_SUCCESS = 1 << 1;
 
-    /**
-     * 放弃链接标识
-     */
-    byte CLOSE_LOGIN = 1 << 2;
+	/**
+	 * 放弃链接标识
+	 */
+	byte CLOSE_LOGIN = 1 << 2;
 
+	/**
+	 * 内部消息标志
+	 */
+	byte INNER_MSG = 1 << 3;
 }

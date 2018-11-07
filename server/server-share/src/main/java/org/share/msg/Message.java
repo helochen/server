@@ -6,7 +6,7 @@ package org.share.msg;
  * @Author chen
  * @Date 2018.6.20
  */
-public final class Message {
+public class Message {
 
     /**
      * 转换后得到的command

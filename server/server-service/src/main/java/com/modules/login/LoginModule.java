@@ -10,6 +10,7 @@ import org.share.command.StageMsgType;
 import org.share.manager.IBusinessManager;
 import org.share.manager.impl.ChannelManager;
 import org.share.msg.IOResult;
+import org.share.msg.InnerMessage;
 import org.share.msg.Message;
 import org.share.tunnel.PublicMsgSender;
 import org.share.tunnel.proto.login.Login;
@@ -39,10 +40,9 @@ public class LoginModule {
 
 			businessManager.updateRoleIdInfo(msg.getSessionId(), roleId);
 
-			Message tmp = new Message(msg.getSessionId() , msg.getFlag() , StageMsgType.LOGIN_ENTER_STAGE , null);
+			Message tmp = new InnerMessage(msg.getSessionId(), StageMsgType.LOGIN_ENTER_STAGE, null);
 
 			PublicMsgSender.SendInnerMsg(tmp);
-
 
 			return IOResult.Builder.SelfIOResult(MsgType.USER_LOGIN, msg.getSessionId(), null, "login".getBytes());
 
@@ -63,7 +63,7 @@ public class LoginModule {
 		String roleId = loginOutRequest.getUserName();
 
 
-		if(businessManager.checkLoginStatus(roleId)){
+		if (businessManager.checkLoginStatus(roleId)) {
 			System.out.println("==========直接发送消息======================");
 			PublicMsgSender.Send2Msg(IOResult.Builder.SelfIOResult(MsgType.USER_LOIGNOUT, msg.getSessionId(), null, "loginout".getBytes()));
 		}

@@ -3,7 +3,6 @@ package org.stage.service.modules;
 import org.share.annotation.EasyMapping;
 import org.share.annotation.EasyModule;
 import org.share.command.FlagType;
-import org.share.command.MsgType;
 import org.share.command.StageMsgType;
 import org.share.msg.Message;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ import org.stage.service.constants.StageModuleConstants;
 public class StageModule {
 
 
-	@EasyMapping(command = StageMsgType.LOGIN_ENTER_STAGE , check =  FlagType.LOGIN_SUCCESS | FlagType.ACTIVE_INIT)
+	@EasyMapping(command = StageMsgType.LOGIN_ENTER_STAGE , check =  FlagType.INNER_MSG)
 	public void enterStage(Message msg){
 		System.out.println("收到了场景的消息");
 	}
