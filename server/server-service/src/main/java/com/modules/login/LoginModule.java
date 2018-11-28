@@ -24,7 +24,7 @@ public class LoginModule {
 	@EasyMapping(command = MsgType.USER_LOGIN, check = FlagType.ACTIVE_INIT | FlagType.LOGIN_SUCCESS)
 	public IOResult userLogin(Message msg) throws InvalidProtocolBufferException {
 
-		IBusinessManager businessManager = ChannelManager.getInstance();
+		IBusinessManager businessManager = ChannelManager.BusinessManagerInstance();
 
 
 		byte[] data = (byte[]) msg.getSource();
@@ -54,7 +54,7 @@ public class LoginModule {
 	@EasyMapping(command = MsgType.USER_LOIGNOUT)
 	public IOResult userLoginOut(Message msg) throws InvalidProtocolBufferException {
 
-		IBusinessManager businessManager = ChannelManager.getInstance();
+		IBusinessManager businessManager = ChannelManager.BusinessManagerInstance();
 
 		byte[] data = (byte[]) msg.getSource();
 

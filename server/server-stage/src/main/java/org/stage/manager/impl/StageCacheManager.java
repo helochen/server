@@ -2,7 +2,7 @@ package org.stage.manager.impl;
 
 import org.share.cache.CacheManager;
 import org.springframework.stereotype.Component;
-import org.stage.IStage;
+import org.stage.instance.IStage;
 import org.stage.session.StageSession;
 import org.stage.session.constants.StageChannelGroupType;
 
@@ -10,11 +10,12 @@ import org.stage.session.constants.StageChannelGroupType;
  * class StageManager
  * function:场景管理器，负责管理所有的用户场景的
  * StageSession实现了ICache接口，可以用CacheManager管理场景集合
- *
+ * //2018-11-29 重新实现
  * @Author chens
  * @Date 2018/7/1
  */
 @Component
+@Deprecated
 public class StageCacheManager {
 
     private final CacheManager<StageSession> cacheManager = CacheManager.Builder.createSyncMapContainer();
@@ -37,7 +38,8 @@ public class StageCacheManager {
      * @return
      */
     public IStage getStage(String stageId) {
-        return cacheManager.getCache(stageId);
+        //return cacheManager.getCache(stageId);
+        return null;
     }
 
     /**
@@ -48,7 +50,7 @@ public class StageCacheManager {
      * @return
      */
     public IStage removeStage(String stageId) {
-        IStage stage = cacheManager.remove(stageId);
+        ////IStage stage = cacheManager.remove(stageId);
         /**
          * TODO 场景被释放的时候，需要给所有的管理的channel推送相关消息以及操作
          *
@@ -57,6 +59,7 @@ public class StageCacheManager {
          * */
 
 
-        return stage;
+        //return stage;
+        return null;
     }
 }

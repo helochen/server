@@ -33,7 +33,7 @@ public class NodeSwapManager {
 
 
     public void activeSession(Channel remote) {
-        exChangeManager.acitve(remote);
+        exChangeManager.active(remote);
         logger.info("activeSession........:D");
     }
 

@@ -28,7 +28,7 @@ public class IOAction implements IIOTunnel{
     /**
      * 创建内存对象的管理器，我们可以得到具体的Channel
      */
-    private IStageManager channelManager = ChannelManager.getInstance();
+    private IStageManager channelManager = ChannelManager.StageManagerInstance();
 
 
     @Override

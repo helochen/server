@@ -1,6 +1,6 @@
 package org.share.cache;
 
-public interface ICache {
+public interface ICache<K> {
 
-    Object getKey();
+    K getKey();
 }

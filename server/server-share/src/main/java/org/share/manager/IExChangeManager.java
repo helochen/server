@@ -21,6 +21,6 @@ public interface IExChangeManager {
     /**
      * 链接初始化
      * */
-    void acitve(Channel channel);
+    void active(Channel channel);
 
 }
