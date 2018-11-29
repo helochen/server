@@ -12,7 +12,7 @@ public interface IStage {
     /**
      * 当一个用户加入场景的时候操作
      * */
-    void addRole(String roleId);
+    void addRole(String roleId ,String roleName);
 
     /**
      * 给场景内的channels发送消息

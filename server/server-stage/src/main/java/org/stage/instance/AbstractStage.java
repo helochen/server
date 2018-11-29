@@ -22,11 +22,15 @@ public abstract class AbstractStage implements IStage {
     private String stageId;
 
     @Override
-    public void addRole(String roleId) {
+    public void addRole(String roleId, String roleName) {
         Channel roleChannel = ChannelManager.StageManagerInstance().getChannelByRoleId(roleId);
+
+        roleChannels.writeAndFlush(roleName + "join this stage");
+
         roleChannel.closeFuture().addListener(
-                future -> roleChannels.writeAndFlush("role leave stage!")
+                future -> roleChannels.writeAndFlush(roleName + "role leave stage!")
         );
+        roleChannels.add(roleChannel);
     }
 
     @Override
